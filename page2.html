@@ -24,10 +24,10 @@ if (scores) {
             }
             var score = scores;
             // 使用fetch发送POST请求给GitHub API
-            fetch('https://api.github.com/repos/fflow2023/fflow2023.GitHub.io/contents/scores.json', {
+            fetch('https://gitee.com/api/v5/repos/flow2023/snake/contents/scores.json', {
                 method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer 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'
+                    'Authorization': 'Bearer d1e20f9701990898e924acc3e9fba70f'
                 }
             })
             .then(response => response.json())
@@ -38,10 +38,10 @@ if (scores) {
                 scores.push({ "name": name, "score": score });
                 
                 // 将更新后的得分数据提交到GitHub仓库
-                fetch('https://api.github.com/repos/fflow2023/fflow2023.GitHub.io/contents/scores.json', {
+                fetch('https://gitee.com/api/v5/repos/flow2023/snake/contents/scores.json', {
                     method: 'PUT',
                     headers: {
-                        'Authorization': 'Bearer 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',
+                        'Authorization': 'Bearer d1e20f9701990898e924acc3e9fba70f',
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
@@ -62,10 +62,10 @@ if (scores) {
         
         // 获取排行榜数据并更新显示的函数
         function updateLeaderboard() {
-            fetch('https://api.github.com/repos/fflow2023/fflow2023.GitHub.io/contents/scores.json', {
+            fetch('https://gitee.com/api/v5/repos/flow2023/snake/contents/scores.json', {
                 method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer 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'
+                    'Authorization': 'Bearer d1e20f9701990898e924acc3e9fba70f'
                 }
             })
             .then(response => response.json())
@@ -94,6 +94,7 @@ if (scores) {
                     leaderboard.appendChild(row);
                 }
             })
+
             .catch(error => console.error(error));
         }
         function restrictInput(input) {
@@ -110,7 +111,7 @@ if (scores) {
     </script>
 </head>
 <body>
-    <h1>上传你的分数</h1>
+    <h1>排行榜</h1>
     <form>
         <label for="name">姓名：</label>
         <input type="text" id="name" oninput="restrictInput(this)" required><br><br>
@@ -168,8 +169,10 @@ if (scores) {
             showPopupA();
           if(scores>=5){
             submitForm();
-            alert("上传成功，刷新试试吧!");
-            window.location.href = "page2.html?scores="+-1;
+            alert("上传成功，刷新试试吧!\n QvQ");
+            setTimeout(function() {
+                window.location.href = "page2.html?scores="+-1;;
+                },1000);
           }
         }
         // 点击按钮后显示弹出框的函数
@@ -203,4 +206,3 @@ if (scores) {
    </script>
 </body>
 </html>
-    
