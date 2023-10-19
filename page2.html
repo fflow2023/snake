@@ -27,7 +27,7 @@ if (scores) {
             fetch('https://api.github.com/repos/fflow2023/fflow2023.GitHub.io/contents/scores.json', {
                 method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer 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'
+                    'Authorization': 'Bearer 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'
                 }
             })
             .then(response => response.json())
@@ -41,7 +41,7 @@ if (scores) {
                 fetch('https://api.github.com/repos/fflow2023/fflow2023.GitHub.io/contents/scores.json', {
                     method: 'PUT',
                     headers: {
-                        'Authorization': 'Bearer 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',
+                        'Authorization': 'Bearer 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',
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
@@ -65,7 +65,7 @@ if (scores) {
             fetch('https://api.github.com/repos/fflow2023/fflow2023.GitHub.io/contents/scores.json', {
                 method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer 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'
+                    'Authorization': 'Bearer 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'
                 }
             })
             .then(response => response.json())
@@ -110,7 +110,7 @@ if (scores) {
     </script>
 </head>
 <body>
-    <p>提交你的分数</p>
+    <p>上传你的分数</p>
     <form>
         <label for="name">姓名：</label>
         <input type="text" id="name" oninput="restrictInput(this)" required><br><br>
