@@ -107,7 +107,7 @@
     <div class="button" id="downButton"><span>&darr;</span></div>
 <body>
 		<script>
-			var score = 0;
+			var scores = 0;
 			document.getElementById("upButton").addEventListener("click", function() {
 						if (keyCode !== 40) {
 				keyCode = 38; // 向上
@@ -224,7 +224,7 @@
 						snakeX[i] = snakeX[i - 1];
 						snakeY[i] = snakeY[i - 1];
 					}
-					score ++;
+					scores ++;
 					createFood(); //重新生成下一個食物
  
 				}
@@ -234,7 +234,8 @@
 					snakeY[snakeY.length - 1] < 0 ||
 					snakeY[snakeY.length - 1] > mapY - 1) {
 					clearInterval(move); //停止移動
-					alert("游戏结束!(刷新以重新开始)\n  你的得分为 : "+score);
+					alert("游戏结束!\n  你的得分为 : "+scores);
+                    goToPage2();
 					return;
 				}
  
@@ -267,3 +268,12 @@
 			}
 		</script>
 </html>
+
+<br><br>
+<button onclick="goToPage2()">排行榜</button>
+
+<script>
+function goToPage2() {
+  window.location.href = "page2.html?scores=" + scores;
+}
+</script>
