@@ -111,7 +111,7 @@ if (scores) {
     </script>
 </head>
 <body>
-    <h1>排行榜</h1>
+    <h3>上传你的分数:</h3>
     <form>
         <label for="name">姓名：</label>
         <input type="text" id="name" oninput="restrictInput(this)" required><br><br>
@@ -185,17 +185,11 @@ if (scores) {
         
         // 点击按钮后显示弹出框的函数
         function showPopupA() {
-            var overlay = document.getElementById("overlay");
-            var modal = document.getElementById("modal");
-            overlay.style.display = "flex";
-            modal.textContent = "分数太低了，就别丢人了吧";
+            alert("分数太低了，就别丢人了吧");
         }
             // 点击按钮后显示弹出框的函数
             function showPopupB() {
-            var overlay = document.getElementById("overlay");
-            var modal = document.getElementById("modal");
-            overlay.style.display = "flex";
-            modal.textContent = "你已经提交过了哦";
+                alert("你已经提交过了哦");
         }
         // 隐藏弹出框的函数
         function hidePopup() {
