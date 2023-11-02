@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <h1>游戏结束!</h1>
-<script>
-var urlParams = new URLSearchParams(window.location.search);
-var scores = urlParams.get('scores');
+    <html lang="en">
+    <head>
+        <title>排行榜</title>
+        <meta charset="UTF-8">    
+        <h1>游戏结束!</h1>
+    <script>
+    var urlParams = new URLSearchParams(window.location.search);
+    var scores = urlParams.get('scores');
 
-if (scores) {
-  document.write('你的得分是: ' + scores + '！');
-} else {
-  document.write('未传递参数scores。');
-}
-</script>
+    if (scores) {
+    document.write('你的得分是: ' + scores + '!');
+    } else {
+    document.write('未传递参数scores。');
+    }
+    </script>
 
       <meta charset="UTF-8">
     <title>Scoreboard</title>
@@ -20,14 +22,15 @@ if (scores) {
         function submitForm() {
             var name = document.getElementById("name").value;
             if (name === "") {
-              name = "Unnamed";
+                name = "Unnamed";
             }
             var score = scores;
-            // 使用fetch发送POST请求给GitHub API
+            // 使用fetch发送GET请求给API
             fetch('https://gitee.com/api/v5/repos/flow2023/snake/contents/scores.json', {
                 method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer 60617cfe11ade864d2cd1ccdfbbc9990'
+                    'Authorization': 'Bearer 60617cfe11ade864d2cd1ccdfbbc9990',
+                    'Accept': 'application/vnd.github.v3+json;charset=UTF-8'
                 }
             })
             .then(response => response.json())
@@ -35,9 +38,9 @@ if (scores) {
                 var scores = JSON.parse(atob(data.content));
                 
                 // 添加新得分数据
-                scores.push({ "name": name, "score": score });
+                scores.push({ "name": encodeURIComponent(name), "score": score });
                 
-                // 将更新后的得分数据提交到GitHub仓库
+                // 将更新后的得分数据提交到API
                 fetch('https://gitee.com/api/v5/repos/flow2023/snake/contents/scores.json', {
                     method: 'PUT',
                     headers: {
@@ -65,7 +68,8 @@ if (scores) {
             fetch('https://gitee.com/api/v5/repos/flow2023/snake/contents/scores.json', {
                 method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer 60617cfe11ade864d2cd1ccdfbbc9990'
+                    'Authorization': 'Bearer 60617cfe11ade864d2cd1ccdfbbc9990',
+                    'Accept': 'application/vnd.github.v3+json;charset=UTF-8'
                 }
             })
             .then(response => response.json())
@@ -79,14 +83,18 @@ if (scores) {
                 
                 // 更新排行榜显示
                 var leaderboard = document.getElementById("leaderboard");
-                leaderboard.innerHTML = "";
+                // 获取所有非表头行
+                var dataRows = leaderboard.querySelectorAll("tr:not(:first-child)"); 
+                // 清空数据行
+                dataRows.forEach(function(row) {row.remove();});
+
                 for (var i = 0; i < scores.length; i++) {
                     var row = document.createElement("tr");
                     var rankCell = document.createElement("td");
                     var nameCell = document.createElement("td");
                     var scoreCell = document.createElement("td");
                     rankCell.textContent = i + 1;
-                    nameCell.textContent = scores[i].name;
+                    nameCell.textContent = decodeURIComponent(scores[i].name);
                     scoreCell.textContent = scores[i].score;
                     row.appendChild(rankCell);
                     row.appendChild(nameCell);
@@ -94,17 +102,13 @@ if (scores) {
                     leaderboard.appendChild(row);
                 }
             })
-
             .catch(error => console.error(error));
         }
         function restrictInput(input) {
-        // 移除非法字符
-        var regex = /[^a-zA-Z0-9_\s]/g;
-        input.value = input.value.replace(regex, '');
 
-        // 检查输入的长度是否超过12个字符
-        if (input.value.length > 12 ) {
-          input.value = input.value.substring(0, 12);
+        // 检查输入的长度是否超过20个字符
+        if (input.value.length > 20 ) {
+          input.value = input.value.substring(0, 20);
         }
 }
 
@@ -121,82 +125,90 @@ if (scores) {
       </script>
         <br><br><input type="button" value="提交" onclick="clickit()"> （需要不低于5分）
     </form>
-    <h2>排行榜</h2> →<button onclick="goToIndex()">返回首页</button>←
-    <table id="leaderboard">
-        <tr>
-            <th> 排名 </th>
-            <th> 姓名 </th>
-            <th> 得分 </th>
-            <br>
-        </tr>
-    </table>
-    <div id="overlay" onclick="hidePopup()">
-        <div id="modal"></div>
-    </div>
+    <h2>排行榜   →<button onclick="goToIndex()">返回首页</button>←</h2> 
     <style>
-        #overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
+        body {
+            font-family: Arial, sans-serif;
         }
         
-        #modal {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        h3 {
+            margin-top: 20px;
+        }
+        
+        form {
+            margin-bottom: 30px;
+        }
+        
+        label {
+            font-weight: bold;
+        }
+        
+        input[type="text"] {
+            width: 200px;
+        }
+        
+        #leaderboard {
+            border-collapse: collapse;
+            width: 300px;
+        }
+        
+        #leaderboard th, #leaderboard td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+        
+        #leaderboard th {
+            background-color: #ccc;
+        }
+        
+        #leaderboard th:first-child, #leaderboard td:first-child {
             text-align: center;
         }
+        
+        #leaderboard td {
+            text-align: left;
+        }
+        
+        #leaderboard tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        #leaderboard tr:hover {
+            background-color: #ddd;
+        }
     </style>
+    <table id="leaderboard">
+        <tr>
+            <th>排名</th>
+            <th>姓名</th>
+            <th>得分</th>
+        </tr>
+    </table>
+
     <script>
         // 页面加载完毕后更新排行榜显示
         window.onload = updateLeaderboard;
+
         function goToIndex() {
          window.location.href = "index.html";
         }
+
         //点击按钮后判断
         function clickit(){
         if(scores < 0)
-             showPopupB();
+             alert("你已经提交过了哦");
           if(scores < 5 && scores>=0)
-            showPopupA();
+            alert("分数太低了，就别丢人了吧");
           if(scores>=5){
             submitForm();
-            alert("上传成功，刷新试试吧!\n QvQ");
+            alert("上传成功\n QvQ");
             setTimeout(function() {
                 window.location.href = "page2.html?scores="+-1;;
-                },1000);
+                },1500);
           }
         }
-        // 点击按钮后显示弹出框的函数
-        function showPopup() { 
-            var overlay = document.getElementById("overlay");
-            var modal = document.getElementById("modal");
-            overlay.style.display = "flex";
-            modal.textContent = "上传成功，刷新试试吧";
-        }
-        
-        // 点击按钮后显示弹出框的函数
-        function showPopupA() {
-            alert("分数太低了，就别丢人了吧");
-        }
-            // 点击按钮后显示弹出框的函数
-            function showPopupB() {
-                alert("你已经提交过了哦");
-        }
-        // 隐藏弹出框的函数
-        function hidePopup() {
-            var overlay = document.getElementById("overlay");
-            overlay.style.display = "none";
-        }
+   
     </script>
-   </script>
+
 </body>
 </html>

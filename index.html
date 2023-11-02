@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>经典贪吃蛇游戏</title>
+  <title>经典贪吃蛇</title>
 <head>
   <style>
     #map {
@@ -97,7 +97,7 @@
 
   </style>
 <body>
-	<h1>贪吃蛇</h1>
+	<h1>贪吃蛇</h1> <div id="scores">当前得分: 0</div>
   <br><div id="map"></div>
   <div class="button-container">
     <!--添加虚拟按钮-->
@@ -107,6 +107,20 @@
     <div class="button" id="downButton"><span>&darr;</span></div>
 <body>
 		<script>
+			//禁止默认的上下左右滚动网页事件
+			document.addEventListener("keydown", function(event) {
+				switch(event.keyCode) {
+				  case 37: // left arrow key
+				  case 38: // up arrow key
+				  case 39: // right arrow key
+				  case 40: // down arrow key
+					event.preventDefault();
+					break;
+				  default:
+					break;
+				}
+			  });
+
 			var scores = 0;
 			document.getElementById("upButton").addEventListener("click", function() {
 						if (keyCode !== 40) {
@@ -213,7 +227,11 @@
 						snakeY[snakeY.length - 1]++;
 						break;
 				}
- 
+				//更新得分
+				function updateScore() {
+					var scoreElement = document.getElementById("scores");
+					scoreElement.textContent = "当前得分: " + scores;
+				}
 				//吃掉食物
 				if(snakeX[snakeX.length - 1] == foodX && snakeY[snakeY.length - 1] == foodY) {
 					//吃到食物
@@ -225,6 +243,7 @@
 						snakeY[i] = snakeY[i - 1];
 					}
 					scores ++;
+					updateScore();
 					createFood(); //重新生成下一個食物
  
 				}
